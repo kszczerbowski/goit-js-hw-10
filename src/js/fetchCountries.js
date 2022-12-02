@@ -5,6 +5,10 @@ const countryList = document.querySelector('.country-list');
 const countryDiv = document.querySelector('.country-info');
 
 export function fetchCountries(name) {
+    if (/\d/.test(countryInput.value)) {
+        Notiflix.Notify.failure('Digits are not allowed in the country name!');
+        return;
+    }
     countryDiv.innerHTML='';
     countryList.innerHTML = '';
     if (countryInput.value !== '') {
@@ -18,7 +22,7 @@ export function fetchCountries(name) {
         .then(data => {
             if (data.length === 1) {
                 countryDiv.innerHTML = `<img src="${data[0].flags.svg}" alt="flag" width="30">
-                <h1>${data[0].name.official}</h1><br>
+                <h1>${data[0].name.common}</h1><br>
                 <h3>Capital: </h3><span>${data[0].capital}</span><br>
                 <h3>Population: </h3><span>${data[0].population}</span><br>
                 <h3>Languages: </h3><span>${Object.values(data[0].languages).join(', ')}</span>`
@@ -27,7 +31,7 @@ export function fetchCountries(name) {
                 countryList.innerHTML = data.map(element => {
                     return `<li>
                     <img src="${element.flags.svg}" alt="flag" width="40">
-                    <span>${element.name.official}</span>
+                    <span>${element.name.common}</span>
                     </li>`
                 }).join('');
             }
